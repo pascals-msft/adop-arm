@@ -1,0 +1,282 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "User name for the Virtual Machine and ADOP"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine and ADOP, must be > 8 chars and have number etc"
+      }
+    },
+    "dnsNamePrefix": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Globally unique DNS Name for the Public IP used to access the Virtual Machine."
+      }
+    },
+    "vmName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "ADOPVM"
+    },
+
+    "vmSize": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "Standard_D4",
+      "allowedValues": [
+        "Standard_A3",
+        "Standard_A4",
+        "Standard_A5",
+        "Standard_A6",
+        "Standard_A7",
+        "Standard_A8",
+        "Standard_A9",
+        "Standard_A10",
+        "Standard_A11",
+        "Standard_D3",
+        "Standard_D4",
+        "Standard_D11",
+        "Standard_D12",
+        "Standard_D13",
+        "Standard_D14",
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2",
+        "Standard_D5_v2",
+        "Standard_D11_v2",
+        "Standard_D12_v2",
+        "Standard_D13_v2",
+        "Standard_D14_v2",
+        "Standard_G1",
+        "Standard_G2",
+        "Standard_G3",
+        "Standard_G4",
+        "Standard_G5",
+        "Standard_DS1",
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_GS1",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS5"
+      ]
+
+    } 
+        
+
+    },
+  "variables": {
+
+    "_artifactsLocation": "https://github.com/pascals-msft/adop-arm/raw/master/",
+    "ubuntuOSVersion":  "16.04.0-LTS",
+            "imagePublisher": "Canonical",
+      "imageOffer": "UbuntuServer",
+      "OSDiskName": "osdiskforlinuxsimple",
+      "nicName": "[concat(parameters('vmName'),'nic')]",
+      "addressPrefix": "10.0.0.0/16",
+      "subnetName": "Subnet",
+      "subnetPrefix": "10.0.0.0/24",
+      "vhdStorageType": "Standard_LRS",
+      "publicIPAddressType": "Dynamic",
+      "vhdStorageContainerName": "vhds",
+      "virtualNetworkName": "MyVNET",
+      "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+      "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
+      "vhdStorageName": "[concat('vhdstorage', uniqueString(resourceGroup().id))]",
+      "ADOPStartupScriptFileName": "startup.sh"
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Storage/storageAccounts",
+        "name": "[variables('vhdStorageName')]",
+        "apiVersion": "2015-06-15",
+        "location": "[resourceGroup().location]",
+        "tags": {
+          "displayName": "StorageAccount"
+        },
+        "properties": {
+          "accountType": "[variables('vhdStorageType')]"
+        }
+      },
+      {
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "name": "[parameters('dnsNamePrefix')]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+          "displayName": "PublicIPAddress"
+        },
+        "properties": {
+          "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+          "dnsSettings": {
+            "domainNameLabel": "[parameters('dnsNamePrefix')]"
+          }
+        }
+      },
+      {
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Network/virtualNetworks",
+        "name": "[variables('virtualNetworkName')]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+          "displayName": "VirtualNetwork"
+        },
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[variables('addressPrefix')]"
+            ]
+          },
+          "subnets": [
+            {
+              "name": "[variables('subnetName')]",
+              "properties": {
+                "addressPrefix": "[variables('subnetPrefix')]"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "[variables('nicName')]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+          "displayName": "NetworkInterface"
+        },
+        "dependsOn": [
+          "[concat('Microsoft.Network/publicIPAddresses/', parameters('dnsNamePrefix'))]",
+          "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+        ],
+        "properties": {
+          "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                "privateIPAllocationMethod": "Dynamic",
+                "publicIPAddress": {
+                  "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('dnsNamePrefix'))]"
+                },
+                "subnet": {
+                  "id": "[variables('subnetRef')]"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[parameters('vmName')]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+          "displayName": "VirtualMachine"
+        },
+        "dependsOn": [
+          "[concat('Microsoft.Storage/storageAccounts/', variables('vhdStorageName'))]",
+          "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        ],
+        "properties": {
+          "hardwareProfile": {
+            "vmSize": "[parameters('vmSize')]"
+          },
+          "osProfile": {
+            "computerName": "[parameters('vmName')]",
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
+          },
+          "storageProfile": {
+            "imageReference": {
+              "publisher": "[variables('imagePublisher')]",
+              "offer": "[variables('imageOffer')]",
+              "sku": "[variables('ubuntuOSVersion')]",
+              "version": "latest"
+            },
+            "osDisk": {
+              "name": "osdisk",
+              "vhd": {
+                "uri": "[concat('http://', variables('vhdStorageName'), '.blob.core.windows.net/', variables('vhdStorageContainerName'), '/', variables('OSDiskName'), '.vhd')]"
+              },
+              "caching": "ReadWrite",
+              "createOption": "FromImage"
+            }
+          },
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+              }
+            ]
+          }
+        },
+        "resources": [
+          {
+            "type": "extensions",
+            "name": "DockerExtension",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.Azure.Extensions",
+              "type": "DockerExtension",
+              "typeHandlerVersion": "1.1",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "docker": {
+                  "port": "2375",
+                  "options": [ "-D", "--dns=8.8.8.8" ]
+                }
+              },
+              "protectedSettings": { }
+            }
+          },
+          {
+            "name": "ADOPStartup",
+            "type": "extensions",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [
+              "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]",
+              "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'),'/extensions/DockerExtension')]"
+
+            ],
+            "tags": {
+              "displayName": "ADOPStartup"
+            },
+            "properties": {
+              "publisher": "Microsoft.OSTCExtensions",
+              "type": "CustomScriptForLinux",
+              "typeHandlerVersion": "1.4",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "fileUris": [
+                  "[concat(variables('_artifactsLocation'), 'CustomScripts/', variables('ADOPStartupScriptFileName'))]"
+                ],
+                "commandToExecute": "[concat('bash ', variables('ADOPStartupScriptFileName'),' -u ',parameters('adminUsername'),' -p ',parameters('adminPassword'))]"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
