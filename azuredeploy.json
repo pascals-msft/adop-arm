@@ -25,7 +25,7 @@
     "vmName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "ADOPVM"
+      "defaultValue": "adop"
     },
 
     "vmSize": {
