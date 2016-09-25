@@ -14,6 +14,6 @@ Parameters:
 - adminUsername: User name for the Virtual Machine and ADOP
 - adminPassword: Password for the Virtual Machine and ADOP, must be > 8 chars and have number, etc.
 - dnsNamePrefix: Globally unique DNS Name for the Public IP used to access the Virtual Machine.
-- vmName: VM name. Default: "ADOPVM"
+- vmName: VM name. Default: "adop"
 - vmSize: VM size. Default: "Standard_DS3_V2"
 
