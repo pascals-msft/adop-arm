@@ -15,7 +15,7 @@
       "value": "adop"
     },
     "vmSize": {
-      "value": "Standard_DS3_V2"
+      "value": "Standard_DS3_v2"
     }
   }
 }
