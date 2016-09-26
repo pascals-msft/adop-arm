@@ -266,7 +266,7 @@
               "autoUpgradeMinorVersion": true,
               "settings": {
                 "fileUris": [
-                  "[concat(variables('_artifactsLocation'), 'CustomScripts/', variables('ADOPStartupScriptFileName'))]"
+                  "[concat(variables('_artifactsLocation'), variables('ADOPStartupScriptFileName'))]"
                 ],
                 "commandToExecute": "[concat('bash ', variables('ADOPStartupScriptFileName'),' -u ',parameters('adminUsername'),' -p ',parameters('adminPassword'))]"
               }
