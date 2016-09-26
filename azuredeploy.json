@@ -72,32 +72,28 @@
         "Standard_GS4",
         "Standard_GS5"
       ]
-
-    } 
-        
-
-    },
+    }      
+  },
   "variables": {
-
     "_artifactsLocation": "https://github.com/pascals-msft/adop-arm/raw/master/",
     "ubuntuOSVersion":  "16.04.0-LTS",
-            "imagePublisher": "Canonical",
-      "imageOffer": "UbuntuServer",
-      "OSDiskName": "osdiskforlinuxsimple",
-      "nicName": "[concat(parameters('vmName'),'nic')]",
-      "addressPrefix": "10.0.0.0/16",
-      "subnetName": "Subnet",
-      "subnetPrefix": "10.0.0.0/24",
-      "vhdStorageType": "Standard_LRS",
-      "publicIPAddressType": "Dynamic",
-      "vhdStorageContainerName": "vhds",
-      "virtualNetworkName": "MyVNET",
-      "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
-      "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
-      "vhdStorageName": "[concat('vhdstorage', uniqueString(resourceGroup().id))]",
-      "ADOPStartupScriptFileName": "startup.sh"
-    },
-    "resources": [
+    "imagePublisher": "Canonical",
+    "imageOffer": "UbuntuServer",
+    "OSDiskName": "osdiskforlinuxsimple",
+    "nicName": "[concat(parameters('vmName'),'nic')]",
+    "addressPrefix": "10.0.0.0/16",
+    "subnetName": "Subnet",
+    "subnetPrefix": "10.0.0.0/24",
+    "vhdStorageType": "Standard_LRS",
+    "publicIPAddressType": "Dynamic",
+    "vhdStorageContainerName": "vhds",
+    "virtualNetworkName": "MyVNET",
+    "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
+    "vhdStorageName": "[concat('vhdstorage', uniqueString(resourceGroup().id))]",
+    "ADOPStartupScriptFileName": "startup.sh"
+  },
+  "resources": [
       {
         "type": "Microsoft.Storage/storageAccounts",
         "name": "[variables('vhdStorageName')]",
@@ -274,5 +270,5 @@
           }
         ]
       }
-    ]
-  }
+  ]
+}
