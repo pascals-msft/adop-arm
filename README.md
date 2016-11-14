@@ -31,5 +31,6 @@ azure group deployment create <my-resource-group> <my-deployment-name> -f azured
 
 For more information:
 
+- You can find Azure CLI here: https://github.com/Azure/azure-xplat-cli.
 - You can find ADOP here: https://github.com/Accenture/adop-docker-compose.
 - This template was initially inspired by: https://github.com/marrobi/AccentureDOP
