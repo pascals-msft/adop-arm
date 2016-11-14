@@ -22,11 +22,17 @@ azure group create <my-resource-group> <azure-location>
 azure group deployment create <my-resource-group> <my-deployment-name> --template-uri https://github.com/pascals-msft/adop-arm/raw/master/azuredeploy.json
 ```
 
-To deploy without interaction, download `azuredeploy.json` and `azuredeploy.parameters.json`, edit the latter with your parameter values and run:
+To deploy without interaction (synchronous), download `azuredeploy.json` and `azuredeploy.parameters.json`, edit the latter with your parameter values and run:
 
 ```
 azure group create <my-resource-group> <azure-location>
 azure group deployment create <my-resource-group> <my-deployment-name> -f azuredeploy.json -e azuredeploy.parameters.json
+```
+
+To deploy without interaction (asynchronous), download `azuredeploy.json` and `azuredeploy.parameters.json`, edit the latter with your parameter values and run:
+
+```
+azure group create --name <my-resource-group> --location <azure-location> --template-file azuredeploy.json --parameters-file azuredeploy.parameters.json
 ```
 
 For more information:
