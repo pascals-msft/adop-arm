@@ -1,0 +1,21 @@
+{
+  "": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "value": "adopadmin"
+    },
+    "adminPassword": {
+      "value": "Accenture..1"
+    },
+    "dnsNamePrefix": {
+      "value": "demoadop1"
+    },
+    "vmName": {
+      "value": "adop"
+    },
+    "vmSize": {
+      "value": "Standard_DS3_v2"
+    }
+  }
+}

@@ -250,7 +250,6 @@
             "dependsOn": [
               "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]",
               "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'),'/extensions/DockerExtension')]"
-
             ],
             "tags": {
               "displayName": "ADOPStartup"
@@ -270,5 +269,12 @@
           }
         ]
       }
-  ]
+  ],
+  "outputs": {
+    "siteUri":{
+      "type": "string",
+      "value": "[concat('http://',reference(parameters('dnsNamePrefix')).dnsSettings.fqdn)]"
+    }
+
+  }
 }

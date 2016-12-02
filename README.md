@@ -8,7 +8,7 @@ The above button will deploy the Accenture DevOps Platform (ADOP) to the Microso
 Parameters:
 
 - adminUsername: User name for the Virtual Machine and ADOP
-- adminPassword: Password for the Virtual Machine and ADOP, must be >= 12 chars and have number, etc.
+- adminPassword: Password for the Virtual Machine and ADOP, must be >= 12 chars and have letters, symbols, numbers, etc.
 - dnsNamePrefix: Globally unique DNS Name for the Public IP used to access the Virtual Machine.
 - vmName: VM name. Default: `adop`
 - vmSize: VM size. Default: `Standard_DS3_V2`
@@ -19,24 +19,31 @@ To deploy in an interactive command line using Azure CLI :
 
 ```
 azure group create <my-resource-group> <azure-location>
-azure group deployment create <my-resource-group> <my-deployment-name> --template-uri https://github.com/pascals-msft/adop-arm/raw/master/azuredeploy.json
+azure group deployment create <my-resource-group> <my-deployment-name> --template-uri https://github.com/pascals-msft/adop-arm/raw/master/azuredeploy.json --nowait
 ```
 
-To deploy without interaction (synchronous), download `azuredeploy.json` and `azuredeploy.parameters.json`, edit the latter with your parameter values and run:
+To deploy without interaction, download `azuredeploy.json` and `azuredeploy.parameters.json`, edit the latter with your parameter values and run:
 
 ```
 azure group create <my-resource-group> <azure-location>
-azure group deployment create <my-resource-group> <my-deployment-name> -f azuredeploy.json -e azuredeploy.parameters.json
+azure group deployment create <my-resource-group> <my-deployment-name> --template-file azuredeploy.json --parameters-file azuredeploy.parameters.json --nowait
 ```
 
-To deploy without interaction (asynchronous), download `azuredeploy.json` and `azuredeploy.parameters.json`, edit the latter with your parameter values and run:
+Or:
 
 ```
 azure group create --name <my-resource-group> --location <azure-location> --template-file azuredeploy.json --parameters-file azuredeploy.parameters.json
 ```
 
+To see the status of the deployment you can use the portal or this command:
+```
+azure group deployment show <my-resource-group>
+```
+
+Once the deployment ended, you can access the ADOP portal on the deployment's siteUri output, which looks like: `http://<dnsNamePrefix>.<azure-location>.cloudapp.azure.com`. 
+
 For more information:
 
-- You can find Azure CLI here: https://github.com/Azure/azure-xplat-cli.
+- You can find Azure Cross Platform CLI here: https://github.com/Azure/azure-xplat-cli.
 - You can find ADOP here: https://github.com/Accenture/adop-docker-compose.
 - This template was initially inspired by: https://github.com/marrobi/AccentureDOP
