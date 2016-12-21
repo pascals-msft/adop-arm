@@ -51,8 +51,8 @@ chmod +x /usr/local/bin/docker-compose
 
 # clone ADOP
 cd /tmp
-# git clone https://github.com/Accenture/adop-docker-compose.git
-git clone https://github.com/pascals-msft/adop-docker-compose.git
+git clone https://github.com/Accenture/adop-docker-compose.git
+# git clone https://github.com/pascals-msft/adop-docker-compose.git
 cd adop-docker-compose
 
 # install ADOP
