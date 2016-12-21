@@ -15,6 +15,10 @@ Parameters:
 
 To deploy interactively, click the above button.
 
+To list available sizes, with Azure CLI: `azure vm sizes -l <azure-location>`
+
+To list available locations: `azure location list`
+
 To deploy in an interactive command line using Azure CLI :
 
 ```
@@ -40,7 +44,7 @@ To see the status of the deployment you can use the portal or this command:
 azure group deployment show <my-resource-group>
 ```
 
-Once the deployment ended, you can access the ADOP portal on the deployment's siteUri output, which looks like: `http://<dnsNamePrefix>.<azure-location>.cloudapp.azure.com`. 
+Once the deployment ends (after usually between 15 than 20 minutes), you can access the ADOP portal on the deployment's siteUri output, which looks like: `http://<dnsNamePrefix>.<azure-location>.cloudapp.azure.com`. 
 
 For more information:
 
