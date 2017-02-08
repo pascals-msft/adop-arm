@@ -52,9 +52,11 @@ chmod +x /usr/local/bin/docker-compose
 
 # install git if not present (for instance on Red Hat)
 
-if [ -f /etc/redhat-release ]; then
-  yum install -y git;
-fi
+#if [ -f /etc/redhat-release ]; then
+#  yum install -y git;
+#fi
+
+which git || (which yum && yum install -y git || apt-get install -y git)
 
 # get and install ADOP
 cd /tmp
