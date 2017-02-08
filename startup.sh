@@ -50,10 +50,11 @@ fi
 curl -L https://github.com/docker/compose/releases/download/1.10.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-# to do: install git if not present (for instance on Red Hat)
+# install git if not present (for instance on Red Hat)
 
-# which git
-# yum install -y git
+if [ -f /etc/redhat-release ]; then
+  yum install -y git;
+fi
 
 # get and install ADOP
 cd /tmp
