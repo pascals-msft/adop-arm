@@ -10,8 +10,9 @@ Parameters:
 - adminUsername: User name for the Virtual Machine and ADOP
 - adminPassword: Password for the Virtual Machine and ADOP, must be >= 12 chars and have letters, symbols, numbers, etc.
 - dnsNamePrefix: Globally unique DNS Name for the Public IP used to access the Virtual Machine.
-- vmName: VM name. Default: `adop`
-- vmSize: VM size. Default: `Standard_DS3_V2`
+- vmName: VM name. Default: `adop`.
+- vmSize: VM size. Default: `Standard_DS3_V2`.
+- osDistribution: Linux Distribution and version to install in the VM. Possible values: `UbuntuServer1404LTS`, `UbuntuServer1604LTS`, `RHEL72`, `RHEL73`. Default: `UbuntuServer1604LTS`.
 
 To deploy interactively, click the above button.
 

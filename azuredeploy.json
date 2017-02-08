@@ -12,20 +12,23 @@
     "adminPassword": {
       "type": "securestring",
       "metadata": {
-        "description": "Password for the Virtual Machine and ADOP, must be > 8 chars and have number etc"
+        "description": "Password for the Virtual Machine and ADOP"
       }
     },
     "dnsNamePrefix": {
       "type": "string",
       "minLength": 1,
       "metadata": {
-        "description": "Globally unique DNS Name for the Public IP used to access the Virtual Machine."
+        "description": "Globally unique DNS Name for the Public IP used to access the Virtual Machine"
       }
     },
     "vmName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "adop"
+      "defaultValue": "adop",
+      "metadata": {
+        "description": "Name of the VM that will be created"
+      }
     },
 
     "vmSize": {
@@ -72,14 +75,25 @@
         "Standard_GS4",
         "Standard_GS5"
       ]
-    }      
+    },
+
+    "osDistribution": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "UbuntuServer1604LTS",
+      "allowedValues": [
+        "UbuntuServer1404LTS",
+        "UbuntuServer1604LTS",
+        "RHEL72",
+        "RHEL73"
+      ]
+    }
+
   },
+
   "variables": {
     "_artifactsLocation": "https://github.com/pascals-msft/adop-arm/raw/master/",
-    "ubuntuOSVersion":  "16.04.0-LTS",
-    "imagePublisher": "Canonical",
-    "imageOffer": "UbuntuServer",
-    "OSDiskName": "osdiskforlinuxsimple",
+    "OSDiskName": "osdiskforADOP",
     "nicName": "[concat(parameters('vmName'),'nic')]",
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "Subnet",
@@ -91,8 +105,37 @@
     "vnetId": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetId'), '/subnets/', variables('subnetName'))]",
     "vhdStorageName": "[concat('vhdstorage', uniqueString(resourceGroup().id))]",
-    "ADOPStartupScriptFileName": "startup.sh"
+    "ADOPStartupScriptFileName": "startup.sh",
+
+    "osDistribution":"[variables(concat('osDistribution',parameters('osDistribution')))]",
+
+    "osDistributionUbuntuServer1404LTS": {
+      "publisher": "Canonical",
+      "offer": "UbuntuServer",
+      "sku": "14.04.5-LTS",
+      "version": "latest"
+    },
+    "osDistributionUbuntuServer1604LTS": {
+      "publisher": "Canonical",
+      "offer": "UbuntuServer",
+      "sku": "16.04-LTS",
+      "version": "latest"
+    },
+    "osDistributionRHEL72": {
+      "publisher": "RedHat",
+      "offer": "RHEL",
+      "sku": "7.2",
+      "version": "latest"
+    },
+    "osDistributionRHEL73": {
+      "publisher": "RedHat",
+      "offer": "RHEL",
+      "sku": "7.3",
+      "version": "latest"
+    }
+
   },
+
   "resources": [
       {
         "type": "Microsoft.Storage/storageAccounts",
@@ -197,10 +240,10 @@
           },
           "storageProfile": {
             "imageReference": {
-              "publisher": "[variables('imagePublisher')]",
-              "offer": "[variables('imageOffer')]",
-              "sku": "[variables('ubuntuOSVersion')]",
-              "version": "latest"
+              "publisher": "[variables('osDistribution').publisher]",
+              "offer": "[variables('osDistribution').offer]",
+              "sku": "[variables('osDistribution').sku]",
+              "version": "[variables('osDistribution').version]"
             },
             "osDisk": {
               "name": "osdisk",
