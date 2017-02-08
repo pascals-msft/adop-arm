@@ -50,16 +50,13 @@ fi
 curl -L https://github.com/docker/compose/releases/download/1.10.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
+# to do: install git if not present (for instance on Red Hat)
+
+# which git
+# yum install -y git
+
 # get and install ADOP
-
-# cd /tmp
-# git clone https://github.com/Accenture/adop-docker-compose.git
-# cd adop-docker-compose
-# ./adop compose init
-
-# git is not installed by default on Red Hat: switching to wget
 cd /tmp
-wget https://github.com/Accenture/adop-docker-compose/archive/master.zip -O adop-docker-compose.zip
-unzip adop-docker-compose.zip
-cd adop-docker-compose-master
+git clone https://github.com/Accenture/adop-docker-compose.git
+cd adop-docker-compose
 ./adop compose init
