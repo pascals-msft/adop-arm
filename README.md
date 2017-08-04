@@ -34,7 +34,6 @@ az group create -n <my-resource-group> -l <azure-location>
 az group deployment create -g <my-resource-group> --template-file azuredeploy.json --parameters @azuredeploy.parameters.json --nowait
 ```
 
-
 To see the status of the deployment you can use the portal or this command:
 ```
 az group deployment list -g <my-resource-group>
