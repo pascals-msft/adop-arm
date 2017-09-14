@@ -1,3 +1,10 @@
+echo $#
+if [ $# -lt 2 ]
+then
+  echo "Usage: $0 <demo_name> UbuntuServer1404LTS|UbuntuServer1604LTS|RHEL72|RHEL73"
+  exit 1
+fi
+
 export DEMO_NAME=$1
 export OS_DISTRIBUTION=$2
 export AZURE_LOCATION=westeurope
