@@ -1,4 +1,3 @@
-echo $#
 if [ $# -lt 2 ]
 then
   echo "Usage: $0 <demo_name> UbuntuServer1404LTS|UbuntuServer1604LTS|RHEL72|RHEL73"
