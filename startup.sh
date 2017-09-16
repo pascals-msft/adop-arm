@@ -47,15 +47,11 @@ fi
 
 # install latest version of compose
 #curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-curl -L https://github.com/docker/compose/releases/download/1.10.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+#curl -L https://github.com/docker/compose/releases/download/1.10.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 # install git if not present (for instance on Red Hat)
-
-#if [ -f /etc/redhat-release ]; then
-#  yum install -y git;
-#fi
-
 which git || (which yum && yum install -y git || apt-get install -y git)
 
 # get and install ADOP
